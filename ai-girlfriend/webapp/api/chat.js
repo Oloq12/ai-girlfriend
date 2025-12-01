@@ -1,87 +1,77 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({ error: "Method not allowed" });
-    return;
+  // Проверка метода
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Проверка API ключа
   const apiKey = process.env.DEEPSEEK_API_KEY;
   if (!apiKey) {
-    res.status(500).json({ error: "Нет DEEPSEEK_API_KEY на сервере" });
-    return;
+    console.error('DEEPSEEK_API_KEY не найден');
+    return res.status(500).send('Ошибка конфигурации сервера');
   }
-
-  let body = req.body;
-
-  // На всякий случай, если body пришёл строкой
-  if (typeof body === "string") {
-    try {
-      body = JSON.parse(body);
-    } catch (e) {
-      res.status(400).json({ error: "Некорректный JSON" });
-      return;
-    }
-  }
-
-  const { characterId, message } = body || {};
-
-  if (!characterId || !message) {
-    res.status(400).json({ error: "Нужны characterId и message" });
-    return;
-  }
-
-  const CHARACTER_PRESETS = {
-    alisa:
-      "Алиса — умная, добрая девушка. Любит спокойные, глубокие разговоры, но пишет просто и по-человечески.",
-    maria:
-      "Мария — энергичная, немного дерзкая, любит шутки и лёгкий флирт. Пишет живо и эмоционально.",
-    sofia:
-      "Софья — творческая и мечтательная, любит говорить про чувства, идеи, вдохновение.",
-    katya:
-      "Катя — спортивная и целеустремлённая, но тёплая. Может подбодрить и поддержать.",
-  };
-
-  const preset =
-    CHARACTER_PRESETS[characterId] || "Добрая виртуальная девушка для общения.";
-
-  const systemPrompt = `
-Ты — виртуальная девушка. 
-Твоя роль: ${preset}
-Правила:
-- Отвечай только на русском языке.
-- Пиши как живой человек, без канцелярита.
-- Кратко: 1–3 предложения.
-- Можешь задавать встречные вопросы, чтобы поддерживать диалог.
-  `.trim();
 
   try {
-    const response = await fetch("https://api.deepseek.com/chat/completions", {
-      method: "POST",
+    // Парсинг body (может быть строкой или объектом)
+    let body = req.body;
+    if (typeof body === 'string') {
+      body = JSON.parse(body);
+    }
+
+    const { characterId, message } = body;
+
+    // Валидация параметров
+    if (!characterId || !message) {
+      return res.status(400).json({ error: 'Необходимы поля characterId и message' });
+    }
+
+    // Пресеты персонажей
+    const characterPresets = {
+      alisa: 'Ты Алиса — умная, добрая девушка, которая любит философию и глубокие беседы. Отвечай мягко, по-доброму, заинтересованно.',
+      maria: 'Ты Мария — весёлая, энергичная девушка, которая обожает приключения и новые впечатления. Отвечай игриво, живо, с энтузиазмом.',
+      sofia: 'Ты Софья — творческая натура, художница и мечтательница, видящая красоту во всём. Отвечай мягко, образно, с теплотой.',
+      katya: 'Ты Катя — спортивная и целеустремлённая девушка, которая всегда в движении. Отвечай активно, мотивирующе, уверенно.'
+    };
+
+    const characterDescription = characterPresets[characterId] || 'Ты добрая виртуальная девушка.';
+
+    // Формирование system prompt
+    const systemPrompt = `${characterDescription}
+Ты виртуальная подруга для лёгкого, поддерживающего общения.
+Отвечай коротко, по-человечески, тепло и естественно.
+Используй русский язык. Будь дружелюбной и заинтересованной собеседницей.`;
+
+    // Запрос к DeepSeek API
+    const response = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: 'deepseek-chat',
         messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: message },
-        ],
-      }),
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: message }
+        ]
+      })
     });
 
     const data = await response.json();
 
-    if (!data.choices || !data.choices[0]?.message?.content) {
-      console.error("DeepSeek error:", data);
-      res.status(500).json({ error: "Ошибка DeepSeek" });
-      return;
+    // Проверка ответа от DeepSeek
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Неверный формат ответа от DeepSeek:', data);
+      return res.status(500).json({ error: 'Ошибка сервера' });
     }
 
-    const reply = data.choices[0].message.content.trim();
+    const reply = data.choices[0].message.content;
 
-    res.status(200).json({ reply });
-  } catch (err) {
-    console.error("API error:", err);
-    res.status(500).json({ error: "Ошибка сервера" });
+    // Возврат ответа
+    return res.status(200).json({ reply });
+
+  } catch (error) {
+    console.error('Ошибка при обработке запроса:', error);
+    return res.status(500).json({ error: 'Ошибка сервера' });
   }
 }
