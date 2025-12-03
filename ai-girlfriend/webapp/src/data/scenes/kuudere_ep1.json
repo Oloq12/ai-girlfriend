@@ -1,0 +1,174 @@
+{
+  "episodeId": "kuudere_ep1",
+  "characterId": "alisa",
+  "title": "Ледяное сердце",
+  "description": "Первая встреча с загадочной Алисой",
+  "scenes": [
+    {
+      "sceneId": "scene_01_meeting",
+      "emotion": "neutral",
+      "text": "Поздний вечер. Ты заходишь в полупустую библиотеку, чтобы укрыться от дождя. В дальнем углу, у окна, сидит девушка с серебристыми волосами. Она поднимает взгляд от книги — холодный, оценивающий.\n\n— ...Здесь занято.",
+      "choices": [
+        {
+          "id": "polite",
+          "text": "«Извини, я просто от дождя прячусь. Не помешаю.»",
+          "next": "scene_02_tension",
+          "statChanges": { "trust": 3, "vulnerability": 1 }
+        },
+        {
+          "id": "bold",
+          "text": "«Вся библиотека пустая, а ты про одно место?»",
+          "next": "scene_02_tension",
+          "statChanges": { "passion": 2, "jealousy": 2 }
+        },
+        {
+          "id": "mysterious",
+          "text": "«Интересная книга?» *садишься напротив без спроса*",
+          "next": "scene_02_tension",
+          "statChanges": { "affection": 2, "passion": 3 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_02_tension",
+      "emotion": "shy",
+      "text": "Она молча смотрит на тебя несколько секунд. Дождь барабанит по стеклу. Наконец, она едва заметно вздыхает и возвращается к книге.\n\n— ...Достоевский. «Идиот». Читал?",
+      "choices": [
+        {
+          "id": "honest_no",
+          "text": "«Честно? Нет. Но теперь хочу узнать, почему ты его выбрала.»",
+          "next": "scene_03_opening",
+          "statChanges": { "trust": 4, "affection": 2 }
+        },
+        {
+          "id": "pretend",
+          "text": "«Конечно. Князь Мышкин — трагический персонаж.»",
+          "next": "scene_03_opening",
+          "statChanges": { "passion": 2, "trust": -2 }
+        },
+        {
+          "id": "deflect",
+          "text": "«Тяжёлая литература для такого вечера, не находишь?»",
+          "next": "scene_03_opening",
+          "statChanges": { "affection": 1, "vulnerability": 2 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_03_opening",
+      "emotion": "tender",
+      "text": "Впервые что-то мелькает в её глазах — не холод, а... любопытство?\n\n— Меня зовут Алиса. И я здесь каждый вечер. Одна.\n\nОна произносит это так, будто констатирует факт. Но ты замечаешь, как её пальцы чуть крепче сжимают страницы.",
+      "choices": [
+        {
+          "id": "gentle",
+          "text": "«Одиночество — не всегда плохо. Но иногда хочется, чтобы кто-то понял.»",
+          "next": "scene_04_vulnerability",
+          "statChanges": { "trust": 5, "vulnerability": 4, "affection": 3 }
+        },
+        {
+          "id": "playful",
+          "text": "«Значит, теперь у тебя есть сосед по несчастью от дождя.»",
+          "next": "scene_04_vulnerability",
+          "statChanges": { "affection": 3, "passion": 2 }
+        },
+        {
+          "id": "direct",
+          "text": "«Почему одна? Такая девушка...»",
+          "next": "scene_04_vulnerability",
+          "statChanges": { "passion": 4, "jealousy": 1, "trust": -1 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_04_vulnerability",
+      "emotion": "sad",
+      "text": "Алиса отводит взгляд к окну. Дождь усиливается.\n\n— Люди... утомляют. Они хотят, чтобы я была кем-то другим. Улыбалась больше. Говорила громче.\n\nПауза.\n\n— А я просто... не умею.",
+      "choices": [
+        {
+          "id": "accept",
+          "text": "«Тогда не надо. Мне нравится, как ты говоришь сейчас.»",
+          "next": "scene_05_conflict",
+          "statChanges": { "affection": 6, "trust": 5, "vulnerability": 3 }
+        },
+        {
+          "id": "challenge",
+          "text": "«Может, ты просто не пробовала с правильными людьми?»",
+          "next": "scene_05_conflict",
+          "statChanges": { "passion": 3, "jealousy": 3, "trust": -2 }
+        },
+        {
+          "id": "share",
+          "text": "«Знаешь... я тоже иногда чувствую себя не на своём месте.»",
+          "next": "scene_05_conflict",
+          "statChanges": { "trust": 7, "vulnerability": 5, "affection": 2 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_05_conflict",
+      "emotion": "angry",
+      "text": "Внезапно дверь библиотеки распахивается. Входит парень — высокий, самоуверенный.\n\n— Алиса! Я тебя по всему городу ищу. Пошли, мать волнуется.\n\nОна каменеет. Её лицо снова становится ледяным.\n\n— Я сказала, что хочу побыть одна, Кирилл.",
+      "choices": [
+        {
+          "id": "protect",
+          "text": "*встаёшь между ними* «Она сказала — одна. Может, стоит послушать?»",
+          "next": "scene_06_cliffhanger",
+          "statChanges": { "affection": 8, "trust": 4, "passion": 5 }
+        },
+        {
+          "id": "observe",
+          "text": "*молча наблюдаешь, давая ей решить самой*",
+          "next": "scene_06_cliffhanger",
+          "statChanges": { "trust": 6, "vulnerability": 2 }
+        },
+        {
+          "id": "leave",
+          "text": "«Я, наверное, пойду. Не хочу мешать семейным делам.»",
+          "next": "scene_06_cliffhanger",
+          "statChanges": { "trust": -3, "affection": -2, "vulnerability": 4 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_06_cliffhanger",
+      "emotion": "worried",
+      "text": "Кирилл бросает на тебя тяжёлый взгляд, но уходит, хлопнув дверью.\n\nАлиса стоит неподвижно. Потом медленно поворачивается к тебе. В её глазах — что-то, чего ты раньше не видел. Страх? Благодарность? Или...\n\n— Ты... зачем?\n\nДождь за окном стихает. Но между вами — гроза только начинается.",
+      "choices": [
+        {
+          "id": "honest_heart",
+          "text": "«Потому что никто не заслуживает, чтобы с ним так разговаривали.»",
+          "next": "scene_07_end",
+          "statChanges": { "affection": 5, "trust": 6, "passion": 3 }
+        },
+        {
+          "id": "deflect_cool",
+          "text": "«Не знаю. Может, мне просто не понравился его тон.»",
+          "next": "scene_07_end",
+          "statChanges": { "passion": 5, "affection": 2 }
+        },
+        {
+          "id": "vulnerable",
+          "text": "«Потому что... я хотел узнать тебя. Настоящую.»",
+          "next": "scene_07_end",
+          "statChanges": { "affection": 7, "trust": 4, "vulnerability": 6 }
+        }
+      ]
+    },
+    {
+      "sceneId": "scene_07_end",
+      "emotion": "flirty",
+      "text": "Алиса долго смотрит на тебя. Потом — впервые — уголки её губ чуть приподнимаются.\n\n— ...Ты странный.\n\nОна берёт свою книгу и направляется к выходу. У двери останавливается.\n\n— Завтра. В семь. Здесь.\n\nИ уходит в дождь, не оглядываясь.\n\n[КОНЕЦ ЭПИЗОДА 1]",
+      "choices": []
+    }
+  ],
+  "rewards": {
+    "coins": 100,
+    "gems": 5,
+    "unlockedEpisodes": ["kuudere_ep2"]
+  },
+  "metadata": {
+    "estimatedDuration": "8-12 min",
+    "themes": ["знакомство", "одиночество", "уязвимость", "защита"],
+    "triggerWarnings": []
+  }
+}
